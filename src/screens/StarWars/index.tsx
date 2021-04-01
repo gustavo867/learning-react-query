@@ -109,6 +109,7 @@ function StarWars({ children }: Props) {
       setInfo("planets");
     },
   });
+
   const {
     isLoading: isLoadingPeople,
     data: peopleQuery,
@@ -169,7 +170,7 @@ function StarWars({ children }: Props) {
 
   const setNextPage = useCallback(() => {
     if (info === "planets") {
-      if (!isPreviousPlanets && peopleData.next) {
+      if (!isPreviousPlanets && data.next) {
         scrollRef.current?.scrollToOffset({
           animated: true,
           offset: 0,
@@ -178,7 +179,7 @@ function StarWars({ children }: Props) {
         setPage((state) => state + 1);
       }
     } else {
-      if (!isPreviousPeoples && data.next) {
+      if (!isPreviousPeoples && peopleData.next) {
         scrollRef.current?.scrollToOffset({
           animated: true,
           offset: 0,
