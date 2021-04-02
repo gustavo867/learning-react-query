@@ -28,6 +28,10 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     textAlign: "center",
   },
+  createWrapper: {
+    flexGrow: 1,
+    flex: 1,
+  },
 });
 
 export default styles;
