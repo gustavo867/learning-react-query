@@ -7,6 +7,8 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Image,
+  View,
 } from "react-native";
 import { ms } from "react-native-size-matters";
 import { TodoData } from "../../screens/Todo";
@@ -15,7 +17,7 @@ import Button from "./Button";
 import Input from "./Input";
 import { useTodo } from "../../hooks/useTodo";
 import { useMutation } from "react-query";
-import api from "../../services/api";
+import api, { BASE_URL } from "../../services/api";
 
 const { width } = Dimensions.get("screen");
 
@@ -27,6 +29,7 @@ type Props = {
 const Card: React.FC<Props> = ({ item, index }) => {
   const { refetch } = useTodo();
   const [input, setInput] = useState("");
+
   const mutation = useMutation(
     (todo: { id: number; message: string }) =>
       api.put(`todos?id=${todo.id}`, { message: todo.message }),
@@ -151,21 +154,48 @@ const Card: React.FC<Props> = ({ item, index }) => {
     >
       <TouchableOpacity
         style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
+          flexDirection: "column",
           width: width * 0.8 - ms(15),
         }}
         onPress={() => edit()}
       >
-        <Text style={styles.planetName}>{item.message}</Text>
-        <Animated.View
+        <View
           style={{
-            transform: [{ rotate }],
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: width * 0.8 - ms(15),
           }}
         >
-          <MaterialIcons name="keyboard-arrow-down" size={24} color="#ffff" />
-        </Animated.View>
+          <Text style={styles.planetName}>{item.message}</Text>
+          <Animated.View
+            style={{
+              transform: [{ rotate }],
+            }}
+          >
+            <MaterialIcons name="keyboard-arrow-down" size={24} color="#ffff" />
+          </Animated.View>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            marginTop: ms(4),
+          }}
+        >
+          {item.images.map((item, index) => (
+            <Image
+              key={item.id}
+              source={{ uri: `${BASE_URL}/uploads/${item.path}` }}
+              style={{
+                width: ms(40),
+                height: ms(40),
+                borderRadius: ms(20),
+                zIndex: index === 0 ? 1000 : -10,
+                marginLeft: index !== 0 ? ms(-10) : 0,
+              }}
+            />
+          ))}
+        </View>
       </TouchableOpacity>
       <Animated.View
         style={{

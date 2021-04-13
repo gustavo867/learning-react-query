@@ -32,6 +32,33 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flex: 1,
   },
+  imageContainer: {
+    width: ms(100),
+    height: ms(100),
+    backgroundColor: "#ccc",
+    borderRadius: ms(50),
+    alignSelf: "center",
+    marginVertical: ms(20),
+  },
+  todoImage: {
+    width: ms(100),
+    height: ms(100),
+    backgroundColor: "#ccc",
+    borderRadius: ms(50),
+    alignSelf: "center",
+  },
+  absolutePlus: {
+    position: "absolute",
+    zIndex: 100,
+    top: ms(30),
+    alignSelf: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    alignItems: "center",
+    justifyContent: "center",
+    width: ms(40),
+    height: ms(40),
+    borderRadius: ms(12),
+  },
 });
 
 export default styles;
