@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useMutation, useQuery } from "react-query";
-import { fetchTodo } from "../api/query";
+import { fetchTodo, postTodo } from "../api/query";
 import api from "../services/api";
 
 function useTodo() {
@@ -19,7 +19,7 @@ function useTodo() {
   );
 
   const mutation = useMutation(
-    (newTodo: { message: string }) => api.post("todos", newTodo),
+    (newTodo: { message: string; img: string[] }) => postTodo(newTodo),
     {
       onSuccess: () => {
         refetch();
