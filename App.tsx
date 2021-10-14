@@ -1,14 +1,6 @@
 import React from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
-
-const queryClient = new QueryClient();
-import StarWars from "./src/screens/StarWars";
-import Todo from "./src/screens/Todo";
+import { AppRoutes } from "./src/routes/app.routes";
 
 export default function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Todo />
-    </QueryClientProvider>
-  );
+  return <AppRoutes />;
 }

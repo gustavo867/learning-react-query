@@ -21,7 +21,7 @@ const Input: React.FC<Props> = ({ title, ...rest }) => {
       <Text style={styles.title}>{title}</Text>
       <TextInput
         style={styles.input}
-        multiline
+        multiline={rest?.value ? rest.value.length > 15 : false}
         placeholderTextColor="rgba(28, 26, 28, 0.7)"
         {...rest}
       />

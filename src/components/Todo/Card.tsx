@@ -27,8 +27,12 @@ type Props = {
 };
 
 const Card: React.FC<Props> = ({ item, index }) => {
-  const { refetch } = useTodo();
+  const { refetch, setCurrentImage, setFullImageIsOpen } = useTodo();
   const [input, setInput] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
+  const translateY = useRef(new Animated.Value(-ms(60))).current;
+  const translateYEdit = useRef(new Animated.Value(-ms(60))).current;
+  const maxHeight = useRef(new Animated.Value(0)).current;
 
   const mutation = useMutation(
     (todo: { id: number; message: string }) =>
@@ -49,10 +53,13 @@ const Card: React.FC<Props> = ({ item, index }) => {
     }
   );
 
-  const [isVisible, setIsVisible] = useState(false);
-  const translateY = useRef(new Animated.Value(-ms(60))).current;
-  const translateYEdit = useRef(new Animated.Value(-ms(60))).current;
-  const maxHeight = useRef(new Animated.Value(0)).current;
+  const handleOpenImage = useCallback(
+    (imgIndex: number) => {
+      setCurrentImage(item.images[imgIndex].path);
+      setFullImageIsOpen(true);
+    },
+    [item]
+  );
 
   const entryAnimation = useCallback(() => {
     translateY.setValue(-ms(60));
@@ -142,6 +149,22 @@ const Card: React.FC<Props> = ({ item, index }) => {
     entryAnimation();
   }, []);
 
+  const handleDeleteTodo = () => {
+    Alert.alert("Delete", "You sure you want do delete you todo?", [
+      {
+        text: "Yes",
+        style: "destructive",
+        onPress: () => {
+          mutationDelete.mutate(item.id);
+        },
+      },
+      {
+        text: "No",
+        style: "cancel",
+      },
+    ]);
+  };
+
   return (
     <Animated.View
       style={[
@@ -183,17 +206,21 @@ const Card: React.FC<Props> = ({ item, index }) => {
           }}
         >
           {item.images.map((item, index) => (
-            <Image
+            <TouchableOpacity
               key={item.id}
-              source={{ uri: `${BASE_URL}/uploads/${item.path}` }}
-              style={{
-                width: ms(40),
-                height: ms(40),
-                borderRadius: ms(20),
-                zIndex: index === 0 ? 1000 : -10,
-                marginLeft: index !== 0 ? ms(-10) : 0,
-              }}
-            />
+              onPress={() => handleOpenImage(index)}
+            >
+              <Image
+                source={{ uri: `${BASE_URL}/uploads/${item.path}` }}
+                style={{
+                  width: ms(40),
+                  height: ms(40),
+                  borderRadius: ms(20),
+                  zIndex: index === 0 ? 1000 : -10,
+                  marginLeft: index !== 0 ? ms(-10) : 0,
+                }}
+              />
+            </TouchableOpacity>
           ))}
         </View>
       </TouchableOpacity>
@@ -224,7 +251,7 @@ const Card: React.FC<Props> = ({ item, index }) => {
           <Button
             text="Delete Todo"
             color="#8C1C13"
-            onPress={() => mutationDelete.mutate(item.id)}
+            onPress={() => handleDeleteTodo()}
           />
         </Animated.View>
       </Animated.View>
